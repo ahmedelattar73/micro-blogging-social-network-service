@@ -33,3 +33,27 @@ if (! function_exists('uploadImage')) {
 
 }
 
+
+
+if (! function_exists('attrTrans')) {
+
+    function attrTrans($attr) {
+
+        $default = config('app.default_locale');
+        $curruntLocale = app()->getLocale();
+
+        $locales = config('app.supported_languages');
+
+        foreach ($locales as $lang)
+        {
+            if( $curruntLocale == $default )
+            {
+                return $attr;
+            } elseif($curruntLocale == $lang) {
+                $name = $attr.'_'.$lang;
+                return  $name;
+            }
+        }
+    }
+
+}
