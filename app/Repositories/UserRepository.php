@@ -35,4 +35,14 @@ class UserRepository implements UserRepositoryInterface
         return  true;
     }
 
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getTimeLine($id)
+    {
+        return $this->user->findOrfail($id)->timeline()->paginate( config('pagination.count') );
+    }
+
 }

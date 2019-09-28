@@ -28,4 +28,11 @@ class UserService
     }
 
 
+    public function timeLine($id)
+    {
+        return $this->user->getTimeLine($id);
+    }
+
+
+
 }

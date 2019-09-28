@@ -79,4 +79,10 @@ class User extends Authenticatable
         return $this->followers()->where('follower_id', $followerId)->get()->count() ? true : false;
     }
 
+
+    public function timeline()
+    {
+        return $this->hasManyThrough('App\Tweet', 'App\Follower', 'user_id', 'user_id', 'id', 'follower_id');
+    }
+
 }

@@ -7,6 +7,6 @@ interface UserRepositoryInterface
 {
 
     public function follow($attributes);
-
+    public function getTimeLine($attributes);
     
 }

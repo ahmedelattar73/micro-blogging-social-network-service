@@ -25,6 +25,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'SetLocale'], function () {
         Route::post('tweets', 'TweetController@store');
         Route::delete('tweets/{id}', 'TweetController@destroy');
         Route::post('follow', 'UserController@follow');
+        Route::get('timeline/{id}', 'UserController@timeline');
     });
 
     Route::post('register', 'AuthController@register');
