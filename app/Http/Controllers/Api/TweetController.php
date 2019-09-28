@@ -32,4 +32,15 @@ class TweetController extends Controller
     }
 
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->tweetService->delete($id);
+        return response()->json(['message' => __('messages.deleted')], 200);
+    }
 }

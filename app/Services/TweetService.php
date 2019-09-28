@@ -27,4 +27,14 @@ class TweetService
         return $this->tweet->create($attributes);
     }
 
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        return $this->tweet->delete($id);
+    }
+
 }

@@ -28,4 +28,14 @@ class TweetRepository implements TweetRepositoryInterface
         return $this->tweet->create($attributes);
     }
 
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        return $this->tweet->findOrfail($id)->delete();
+    }
+
 }
