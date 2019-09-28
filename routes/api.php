@@ -19,9 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::group(['namespace' => 'API', 'middleware' => 'SetLocale'], function () {
+Route::group(['namespace' => 'Api', 'middleware' => 'SetLocale'], function () {
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('tweets', 'TweetController@store');
+    });
 
     Route::post('register', 'AuthController@register');
     Route::post('login',    'AuthController@login');
+
 
 });
