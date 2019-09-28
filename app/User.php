@@ -61,4 +61,22 @@ class User extends Authenticatable
         return config('app.url') . Storage::url($value);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followers()
+    {
+        return $this->belongsToMany('App\User', 'user_followers', 'user_id', 'follower_id');
+    }
+
+
+    /**
+     * @param $followerId
+     * @return bool
+     */
+    public function isFollowedBy($followerId)
+    {
+        return $this->followers()->where('follower_id', $followerId)->get()->count() ? true : false;
+    }
+
 }
