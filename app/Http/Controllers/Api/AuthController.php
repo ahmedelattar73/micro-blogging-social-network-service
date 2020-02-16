@@ -5,12 +5,24 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegister;
 use App\Http\Requests\AuthLogin;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use Illuminate\Http\Request;
+
 
 class AuthController extends Controller
 {
+
+    use AuthenticatesUsers;
+
+    public function __construct()
+    {
+        // override user login attemp limitation.
+        $this->maxAttempts  = config('auth.login_attemp_count');
+        $this->decayMinutes = config('auth.login_attemp_throttle_time');
+    }
 
     /**
      * @param AuthRegister $request
@@ -36,11 +48,24 @@ class AuthController extends Controller
      */
     public function login(AuthLogin $request)
     {
-        if ($token = JWTAuth::attempt( $request->validated() )) {
+
+        if ($this->hasTooManyLoginAttempts($request)) {
+
+            $this->fireLockoutEvent($request);
+            return response()->json(['error' => 'Too many logins'], 400);
+
+        } elseif ($token = JWTAuth::attempt( $request->validated() )) {
+
             return $this->respondWithToken($token, auth()->user() );
+
+        } else {
+            $this->incrementLoginAttempts($request);
         }
+
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+
 
     /**
      * Log the user out (Invalidate the token)

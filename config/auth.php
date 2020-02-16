@@ -100,4 +100,7 @@ return [
         ],
     ],
 
+    'login_attemp_count' => 5, //Number of user login attemp
+    'login_attemp_throttle_time' => 30, //Trottle time in Minutes
+
 ];
