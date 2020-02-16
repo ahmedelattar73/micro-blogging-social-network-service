@@ -19,6 +19,7 @@ class AuthController extends Controller
     public function register(AuthRegister $request)
     {
         $validated          = $request->validated();
+        $validated['age'] = '11';
         $validated['image'] = uploadImage(180, 180, 'image', 'profiles');
         $user               = User::create($validated);
         $token              = JWTAuth::fromUser($user);

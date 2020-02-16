@@ -29,6 +29,7 @@ class AuthRegister extends FormRequest
             'email'      => 'required|email|max:255|unique:users',
             'password'   => 'required|string|min:6|max:255',
             'image'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'birth_date' => 'required|date|date_format:Y-m-d|before:today'
         ];
     }
 
