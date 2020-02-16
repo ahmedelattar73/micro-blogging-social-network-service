@@ -25,9 +25,9 @@ class AuthRegister extends FormRequest
     public function rules()
     {
         return [
-            'name'       => 'required|string',
-            'email'      => 'required|email|unique:users',
-            'password'   => 'required|string',
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|email|max:255|unique:users',
+            'password'   => 'required|string|min:6|max:255',
             'image'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
