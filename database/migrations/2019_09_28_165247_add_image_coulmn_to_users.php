@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AddImageCoulmnToUsers extends Migration
@@ -13,8 +14,12 @@ class AddImageCoulmnToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('image')->after('password');
+        DB::transaction(function () {
+
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('image')->after('password');
+            });
+
         });
     }
 
