@@ -11,4 +11,8 @@ class Tweet extends Model
         'tweet_body',
         'user_id',
     ];
+
+    public function author() {
+        return $this->belongsTo(User::Class, 'user_id');
+    }
 }
