@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegister;
 use App\Http\Requests\AuthLogin;
+use App\Http\Resources\UserResource;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use App\User;
-use Illuminate\Http\Request;
 
 
 class AuthController extends Controller
@@ -17,11 +18,18 @@ class AuthController extends Controller
 
     use AuthenticatesUsers;
 
-    public function __construct()
+    protected $userRepository;
+
+    /**
+     * 1- Inject userRepository.
+     * 2- User login attemp limitation.
+     *  Set ThrottlesLogins trait maxAttempts, decayMinutes attributes
+     */
+    public function __construct(UserRepository $userRepository)
     {
-        // override user login attemp limitation.
-        $this->maxAttempts  = config('auth.login_attemp_count');
-        $this->decayMinutes = config('auth.login_attemp_throttle_time');
+        $this->userRepository   = $userRepository;
+        $this->maxAttempts      = config('auth.login_attemp_count');
+        $this->decayMinutes     = config('auth.login_attemp_throttle_time');
     }
 
     /**
@@ -30,13 +38,8 @@ class AuthController extends Controller
      */
     public function register(AuthRegister $request)
     {
-        $validated          = $request->validated();
-        $validated['age'] = '11';
-        $validated['image'] = uploadImage(180, 180, 'image', 'profiles');
-        $user               = User::create($validated);
-        $token              = JWTAuth::fromUser($user);
-
-        return $this->respondWithToken($token, $user);
+        $user = $this->userRepository->create( $request->validated() );
+        return $this->respondWithToken( JWTAuth::fromUser($user), $user );
     }
 
     /**
@@ -89,7 +92,7 @@ class AuthController extends Controller
     protected function respondWithToken($token, User $user)
     {
         return response()->json([
-            'data'          => $user,
+            'data'          => new UserResource($user),
             'access_token'  => $token,
             'token_type'    => 'bearer',
             'expires_in'    => auth('api')->factory()->getTTL() * 60,

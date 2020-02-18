@@ -9,14 +9,15 @@ class UserObserver
 {
 
     /**
+     * 1- Calculate user age from birth day.
+     * 2- Upload image
      * @param User $user
      * @return void
      */
     public function saving(User $user)
     {
-        // Calculate user age from birth day.
-        $dt = Carbon::now();
-        $user->age = $dt->diffInYears($user->birth_date);
+        $user->age   = Carbon::now()->diffInYears($user->birth_date);
+        $user->image = uploadImage(request()->image, config('images.profile.width'), config('images.profile.height'));
     }
 
 }

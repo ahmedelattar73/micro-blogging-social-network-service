@@ -11,14 +11,19 @@ class UserRepository implements UserRepositoryInterface
     protected $user;
 
     /**
-     * TweetRepository constructor.
-     * @param Tweet $user
+     * UserRepository constructor.
+     * @param User $user
      */
     public function __construct(User $user)
     {
         $this->user = $user;
     }
 
+
+    public function create($attributes)
+    {
+        return $this->user->create($attributes);
+    }
 
     /**
      * @param $attributes
@@ -42,7 +47,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getTimeLine($id)
     {
-        return $this->user->findOrfail($id)->timeline()->paginate( config('pagination.count') );
+        return $this->user->findOrfail($id)->timeline()->with('author')->paginate( config('pagination.count') );
     }
 
 }
