@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FollowUser;
-use App\Http\Requests\Timeline;
+use App\Http\Resources\TweetCollection;
 use App\Services\UserService;
 
 class UserController extends Controller
 {
-
 
     protected $userService;
 
@@ -25,15 +24,14 @@ class UserController extends Controller
     public function follow(FollowUser $request)
     {
         $this->userService->follow($request);
-        return response()->json(['success' => __('messages.success_follow')], 200);
+        return response()->json(['message' => __('messages.success_follow')], 200);
     }
-
 
     public function timeline($id)
     {
         $tweets = $this->userService->timeLine($id);
-        return response()->json(['success' => $tweets], 200);
+        //Return api resource data as transformation layer.
+        return  new TweetCollection( $tweets );
     }
-
 
 }
