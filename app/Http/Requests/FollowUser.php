@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FollowUser extends FormRequest
 {
@@ -24,8 +25,12 @@ class FollowUser extends FormRequest
     public function rules()
     {
         return [
-            'user_id'       => 'required|numeric|exists:users,id',
-            'follower_id'   => 'required|numeric|exists:users,id',
+            'user_id'       => [
+                'required',
+                'numeric',
+                'exists:users,id',
+                Rule::notIn([auth()->id()]), // User cannot follow himself !!
+            ],
         ];
     }
 }

@@ -27,7 +27,9 @@ class UserController extends Controller
      */
     public function follow(FollowUser $request)
     {
-        $this->userRepository->follow($request);
+        $attribute = $request->validated();
+        $attribute['follower_id'] = auth()->id();
+        $this->userRepository->follow($attribute);
         return response()->json(['message' => __('messages.success_follow')], 200);
     }
 
