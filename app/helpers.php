@@ -3,32 +3,20 @@
 
 if (! function_exists('uploadImage')) {
 
-    function uploadImage($width, $height, $key = 'image', $dir = null) {
+    function uploadImage($image, $width, $height) {
 
-        if (request()->hasFile($key))
-        {
+        $dir = 'profiles/';
+        $path = storage_path('app/public/' . $dir);
 
-            if($dir) {
-                $dir = $dir . '/';
-            }
-
-            $path = storage_path('app/public/'. $dir);
-
-
-            if (!file_exists($path)) {
-                mkdir($path, 0755, true);
-            }
-
-            $photo        = request()->file($key);
-            $imageName    =  time() . '_' . rand(00, 99) . '.' . $photo->getClientOriginalExtension();
-            $location  = $path . $imageName ;
-            $path         = $location;
-
-            Image::make($photo)->resizeCanvas( $width, $height )->save($path);
-            return $dir . $imageName;
+        if (!file_exists($path)) {
+            mkdir($path, 0755, true);
         }
 
-        $imageName = null;
+        $imageName =  time() . '_' . rand(00, 99) . '.' . $image->getClientOriginalExtension();
+        $fullPocation  = $path . $imageName ;
+
+        Image::make($image)->resizeCanvas($width, $height)->save($fullPocation);
+        return $dir . $imageName ;
     }
 
 }
