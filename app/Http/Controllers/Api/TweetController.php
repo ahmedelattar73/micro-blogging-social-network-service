@@ -26,9 +26,7 @@ class TweetController extends Controller
      */
     public function store(StoreTweet $request)
     {
-        $attributes = $request->validated();
-        $attributes['user_id'] = auth()->id();
-        $tweet = $this->tweetRepository->create($attributes);
+        $tweet = $this->tweetRepository->create($request->validated());
         return response()->json(new TweetResource($tweet), 201);
     }
 
