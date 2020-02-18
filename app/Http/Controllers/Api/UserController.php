@@ -27,9 +27,9 @@ class UserController extends Controller
         return response()->json(['message' => __('messages.success_follow')], 200);
     }
 
-    public function timeline($id)
+    public function timeline()
     {
-        $tweets = $this->userService->timeLine($id);
+        $tweets = $this->userService->timeLine(auth()->id());
         //Return api resource data as transformation layer.
         return  new TweetCollection( $tweets );
     }
