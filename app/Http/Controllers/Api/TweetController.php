@@ -5,19 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTweet;
 use App\Http\Resources\TweetResource;
-use Illuminate\Http\Request;
-use App\Services\TweetService;
 use App\Repositories\TweetRepository;
 
 
 class TweetController extends Controller
 {
 
-    protected $tweetService;
+    protected $tweetRepository;
 
-    public function __construct(TweetService $tweetService)
+    public function __construct(TweetRepository $tweetRepository)
     {
-        $this->tweetService = $tweetService;
+        $this->tweetRepository = $tweetRepository ;
     }
 
     /**
@@ -28,7 +26,7 @@ class TweetController extends Controller
      */
     public function store(StoreTweet $request)
     {
-        $tweet = $this->tweetService->create($request);
+        $tweet = $this->tweetRepository->create($request->validated());
         return response()->json(new TweetResource($tweet), 201);
     }
 
@@ -40,7 +38,7 @@ class TweetController extends Controller
      */
     public function destroy($id)
     {
-        $this->tweetService->delete($id);
+        $this->tweetRepository->delete($id);
         return response()->json(null, 204);
     }
 }

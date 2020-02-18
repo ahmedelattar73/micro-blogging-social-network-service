@@ -17,24 +17,5 @@ class TweetService
         $this->tweet = $tweet ;
     }
 
-    /**
-     * @param StoreTweet $request
-     * @return mixed
-     */
-    public function create(StoreTweet $request)
-    {
-        $attributes = $request->all();
-        return $this->tweet->create($attributes);
-    }
-
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function delete($id)
-    {
-        return $this->tweet->delete($id);
-    }
 
 }
