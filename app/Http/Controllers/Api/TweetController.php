@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTweet;
+use App\Http\Resources\TweetResource;
 use Illuminate\Http\Request;
 use App\Services\TweetService;
 use App\Repositories\TweetRepository;
@@ -28,9 +29,8 @@ class TweetController extends Controller
     public function store(StoreTweet $request)
     {
         $tweet = $this->tweetService->create($request);
-        return response()->json(['success' => $tweet], 200);
+        return response()->json(new TweetResource($tweet), 201);
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -41,6 +41,6 @@ class TweetController extends Controller
     public function destroy($id)
     {
         $this->tweetService->delete($id);
-        return response()->json(['message' => __('messages.deleted')], 200);
+        return response()->json(null, 204);
     }
 }
