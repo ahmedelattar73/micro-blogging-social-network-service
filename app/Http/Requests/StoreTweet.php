@@ -25,7 +25,6 @@ class StoreTweet extends FormRequest
     {
         return [
             'tweet_body'   => 'required|string|max:140',
-            'user_id'      => 'required|numeric|exists:users,id',
         ];
     }
 }

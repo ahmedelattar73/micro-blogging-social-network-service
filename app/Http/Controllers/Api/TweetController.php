@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTweet;
 use App\Http\Resources\TweetResource;
 use App\Repositories\TweetRepository;
-
+use App\Tweet;
 
 class TweetController extends Controller
 {
@@ -26,7 +26,9 @@ class TweetController extends Controller
      */
     public function store(StoreTweet $request)
     {
-        $tweet = $this->tweetRepository->create($request->validated());
+        $attributes = $request->validated();
+        $attributes['user_id'] = auth()->id();
+        $tweet = $this->tweetRepository->create($attributes);
         return response()->json(new TweetResource($tweet), 201);
     }
 
@@ -36,9 +38,10 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Tweet $tweet)
     {
-        $this->tweetRepository->delete($id);
+        $this->authorize('delete', $tweet);
+        $this->tweetRepository->delete($tweet->id);
         return response()->json(null, 204);
     }
 }
