@@ -17,22 +17,5 @@ class UserService
         $this->user = $user ;
     }
 
-    /**
-     * @param StoreTweet $request
-     * @return mixed
-     */
-    public function follow(FollowUser $request)
-    {
-        $attributes = $request->all();
-        return $this->user->follow($attributes);
-    }
-
-
-    public function timeLine($id)
-    {
-        return $this->user->getTimeLine($id);
-    }
-
-
 
 }

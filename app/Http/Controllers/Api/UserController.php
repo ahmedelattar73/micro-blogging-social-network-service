@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FollowUser;
 use App\Http\Resources\TweetCollection;
-use App\Services\UserService;
+use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
 
-    protected $userService;
+    protected $userRepository;
 
-    public function __construct(UserService $userService)
+    /**
+     * UserController constructor.
+     * @param UserRepository $user
+     */
+    public function __construct(UserRepository $userRepository)
     {
-        $this->userService = $userService;
+        $this->userRepository = $userRepository ;
     }
 
     /**
@@ -23,14 +27,13 @@ class UserController extends Controller
      */
     public function follow(FollowUser $request)
     {
-        $this->userService->follow($request);
+        $this->userRepository->follow($request);
         return response()->json(['message' => __('messages.success_follow')], 200);
     }
 
     public function timeline()
     {
-        $tweets = $this->userService->timeLine(auth()->id());
-        //Return api resource data as transformation layer.
+        $tweets = $this->userRepository->getTimeLine(auth()->id());
         return  new TweetCollection( $tweets );
     }
 
